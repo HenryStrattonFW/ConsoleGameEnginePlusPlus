@@ -1,0 +1,19 @@
+# ninja log v5
+0	10	0	clean	e1787aa3bf94b3c6
+5	913	6900349907437923	CMakeFiles/ConsoleGameEnginePlusPlus.dir/main.cpp.obj	2a94dacc0ad3f159
+1505	1689	6900350221952550	ConsoleGameEnginePlusPlus.exe	98e2cc832bb51949
+2	110	6900361649801926	build.ninja	79e33563f377e55
+1	1952	6900349917808476	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/GameConsole.cpp.obj	875a7f24c0de9121
+0	871	6900331158257891	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/Canvas.cpp.obj	7cc317503406b66c
+19	781	6900268556857307	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/Input.cpp.obj	7f7c63795f31c781
+0	1504	6900350220376692	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/TestCartridge.cpp.obj	437ceae208492684
+13	911	6900349907402798	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/GameCartridge.cpp.obj	5aec17b7545ba266
+15	865	6900327312543043	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/Utils.cpp.obj	9d9dc9c629cc9f13
+30	764	6900361683950957	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/Input.cpp.obj	8d8b5768f42b0b2
+45	856	6900361684866968	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/Utils.cpp.obj	104e1705609a7b79
+23	857	6900361684856942	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/Canvas.cpp.obj	89bb348b9d69e6ed
+0	860	6900361684906996	CMakeFiles/ConsoleGameEnginePlusPlus.dir/main.cpp.obj	192be3267f3e42a
+37	861	6900361684937027	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/GameCartridge.cpp.obj	47bec466f360edc0
+15	1636	6900361692641117	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/TestCartridge.cpp.obj	4b34c1029d31d77d
+8	2034	6900361696644014	CMakeFiles/ConsoleGameEnginePlusPlus.dir/src/GameConsole.cpp.obj	3111f1bae915abfc
+2034	2431	6900361700430583	ConsoleGameEnginePlusPlus.exe	98e2cc832bb51949

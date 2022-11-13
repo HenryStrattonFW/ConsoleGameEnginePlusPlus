@@ -1,3 +1,0 @@
-C:/Users/Henry/Documents/Repos/C++/ConsoleGameEnginePlusPlus/bin/CMakeFiles/ConsoleGameEnginePlusPlus.dir
-C:/Users/Henry/Documents/Repos/C++/ConsoleGameEnginePlusPlus/bin/CMakeFiles/edit_cache.dir
-C:/Users/Henry/Documents/Repos/C++/ConsoleGameEnginePlusPlus/bin/CMakeFiles/rebuild_cache.dir
