@@ -15,8 +15,9 @@ namespace ConsoleGameEngine
 	{
 	public:
 		Canvas(short width = 1, short height = 1);
+		~Canvas();
 		
-		std::vector<CHAR_INFO>& GetBuffer();
+		CHAR_INFO* GetBuffer();
 		COORD GetSize();
 		
 		void Clear();
@@ -36,7 +37,7 @@ namespace ConsoleGameEngine
 	
 	private:
 		COORD size;
-		std::vector<CHAR_INFO> buffer;
+		CHAR_INFO* buffer;
 	};
 	
 } // ConsoleGameEngine

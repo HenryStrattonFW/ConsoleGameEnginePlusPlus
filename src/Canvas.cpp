@@ -3,19 +3,22 @@
 //
 
 #include "../include/Canvas.h"
+#include "../include/Colours.h"
 
 namespace ConsoleGameEngine
 {
 	Canvas::Canvas(short width, short height)
 	{
-		size = {width,height};
+		size = {width, height};
 		
-		for (int y = 0; y < size.Y; ++y)
-			for (int x = 0; x < size.X; ++x)
-				buffer.push_back({' ',0});
+		buffer = new CHAR_INFO[width*height];
+	}
+	Canvas::~Canvas()
+	{
+		delete buffer;
 	}
 	
-	std::vector<CHAR_INFO>& Canvas::GetBuffer()
+	CHAR_INFO* Canvas::GetBuffer()
 	{
 		return buffer;
 	}
@@ -41,7 +44,7 @@ namespace ConsoleGameEngine
 	
 	void Canvas::SetPixel(short x, short y, char symbol, ForegroundColour colour, BackgroundColour bg)
 	{
-		if(x<0 || y<0 || x>= size.X || y>=size.Y)
+		if (x < 0 || y < 0 || x >= size.X || y >= size.Y)
 			return;
 		
 		int idx = x + (size.X * y);
@@ -51,7 +54,7 @@ namespace ConsoleGameEngine
 	
 	void Canvas::SetPixel(short x, short y, char symbol, ForegroundColour colour)
 	{
-		if(x<0 || y<0 || x>= size.X || y>=size.Y)
+		if (x < 0 || y < 0 || x >= size.X || y >= size.Y)
 			return;
 		
 		int idx = x + (size.X * y);
@@ -86,10 +89,11 @@ namespace ConsoleGameEngine
 				SetPixel(x + ix, y + iy, static_cast<char>(PixelType::Full), colour);
 	}
 	
-	void Canvas::FillRect(short x, short y, short w, short h, ForegroundColour strokeColour, ForegroundColour fillColour)
+	void
+	Canvas::FillRect(short x, short y, short w, short h, ForegroundColour strokeColour, ForegroundColour fillColour)
 	{
-		DrawRect(x,y,w,h,strokeColour);
-		FillRect(x+1,y+1,w-2,h-2,fillColour);
+		DrawRect(x, y, w, h, strokeColour);
+		FillRect(x + 1, y + 1, w - 2, h - 2, fillColour);
 	}
 	
 	
@@ -134,7 +138,7 @@ namespace ConsoleGameEngine
 		do
 		{
 			DrawLine(x + temp, y + radius, x + temp, y - radius, colour);
-			DrawLine(x - temp, y + radius,x - temp, y - radius, colour);
+			DrawLine(x - temp, y + radius, x - temp, y - radius, colour);
 			DrawLine(x + radius, y + temp, x + radius, y - temp, colour);
 			DrawLine(x - radius, y + temp, x - radius, y - temp, colour);
 			
@@ -153,14 +157,14 @@ namespace ConsoleGameEngine
 	
 	void Canvas::FillCircle(short x, short y, float radius, ForegroundColour strokeColour, ForegroundColour fillColour)
 	{
-		FillCircle(x,y,radius,fillColour);
-		DrawCircle(x,y,radius, strokeColour);
+		FillCircle(x, y, radius, fillColour);
+		DrawCircle(x, y, radius, strokeColour);
 	}
 	
 	void Canvas::DrawLine(short x1, short y1, short x2, short y2, ForegroundColour colour)
 	{
-		int dx = (int)abs(x2 - x1), sx = x1 < x2 ? 1 : -1;
-		int dy = (int)abs(y2 - y1), sy = y1 < y2 ? 1 : -1;
+		int dx = (int) abs(x2 - x1), sx = x1 < x2 ? 1 : -1;
+		int dy = (int) abs(y2 - y1), sy = y1 < y2 ? 1 : -1;
 		int err = (dx > dy ? dx : -dy) / 2, e2;
 		
 		while (x1 != x2 || y1 != y2)
@@ -169,13 +173,14 @@ namespace ConsoleGameEngine
 			e2 = err;
 			if (e2 > -dx)
 			{
-				err -= dy; x1 += sx;
+				err -= dy;
+				x1 += sx;
 			}
 			if (e2 < dy)
 			{
-				err += dx; y1 += sy;
+				err += dx;
+				y1 += sy;
 			}
 		}
 	}
-	
-} // ConsoleGameEngine
+}// ConsoleGameEngine

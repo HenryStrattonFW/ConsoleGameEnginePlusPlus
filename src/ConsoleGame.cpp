@@ -6,7 +6,6 @@
 
 namespace ConsoleGameEngine
 {
-	
 	ConsoleGame::ConsoleGame(string name, short width, short height)
 	{
 		// Set up some stuff we want to keep track of.
@@ -48,6 +47,34 @@ namespace ConsoleGameEngine
 		cfi.FontWeight = FW_NORMAL;
 		std::wcscpy(cfi.FaceName, L"Terminal"); // Choose your font
 		SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+	}
+	
+	ConsoleGame::~ConsoleGame()
+	{
+		// TODO: Likely need some cleanup eventually here.
+	}
+	
+	void ConsoleGame::Update()
+	{
+	}
+	
+	void ConsoleGame::ClearScreen()
+	{
+		screenCanvas.Clear();
+	}
+	
+	void ConsoleGame::Render()
+	{
+		WriteConsoleOutputA(writeHandle,
+							screenCanvas.GetBuffer(),
+							screenSize,
+							{0,0},
+							&screenRect);
+	}
+	
+	bool ConsoleGame::IsGameActive()
+	{
+		return gameActive;
 	}
 	
 } // ConsoleGameEngine
