@@ -25,6 +25,7 @@ namespace ConsoleGameEngine
 		bool MouseButtonDown(MouseButton button);
 		bool MouseButtonPressed(MouseButton button);
 		bool MouseButtonReleased(MouseButton button);
+		COORD MousePosition();
 	};
 	
 } // ConsoleGameEngine

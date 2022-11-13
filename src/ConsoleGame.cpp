@@ -15,7 +15,8 @@ namespace ConsoleGameEngine
 					  static_cast<SHORT>(height-1)
 		};
 		screenSize = {width, height};
-		screenCanvas = Canvas(width, height);
+		activeCanvas = new Canvas(width, height);
+		presentedCanvas = new Canvas(width, height);
 		gameActive = true;
 		
 		// Set up the handles for reading/writing:
@@ -35,7 +36,7 @@ namespace ConsoleGameEngine
 		cfi.dwFontSize = {8,8};
 		cfi.FontFamily = FF_DONTCARE;
 		cfi.FontWeight = FW_NORMAL;
-		std::wcscpy(cfi.FaceName, L"Terminal"); // Choose your font
+		std::wcscpy(cfi.FaceName, L"Terminal");
 		SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
 		
 		// Set up the window.
@@ -63,9 +64,14 @@ namespace ConsoleGameEngine
 		// TODO: Likely need some cleanup eventually here.
 	}
 	
+	void ConsoleGame::Quit()
+	{
+		gameActive = false;
+	}
+	
 	Canvas& ConsoleGame::GetCanvas()
 	{
-		return screenCanvas;
+		return *activeCanvas;
 	}
 	
 	bool ConsoleGame::IsGameActive()
@@ -75,21 +81,19 @@ namespace ConsoleGameEngine
 	
 	void ConsoleGame::Update()
 	{
+		activeCanvas->Clear(BackgroundColour::Black);
 		Input::Update(readHandle);
-	}
-	
-	void ConsoleGame::ClearScreen()
-	{
-		screenCanvas.Clear();
 	}
 	
 	void ConsoleGame::Render()
 	{
 		WriteConsoleOutputA(writeHandle,
-							screenCanvas.GetBuffer(),
-							screenSize,
+							activeCanvas->GetBuffer(),
+							activeCanvas->GetSize(),
 							{0,0},
 							&screenRect);
+		
+		std::swap(presentedCanvas, activeCanvas);
 	}
 	
 } // ConsoleGameEngine

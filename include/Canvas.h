@@ -21,6 +21,7 @@ namespace ConsoleGameEngine
 		COORD GetSize();
 		
 		void Clear();
+		void Clear(BackgroundColour colour);
 		
 		void SetPixel(short x, short y, char symbol, ForegroundColour colour, BackgroundColour bg);
 		void SetPixel(short x, short y, char symbol, ForegroundColour colour);

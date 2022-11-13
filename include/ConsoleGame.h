@@ -19,7 +19,8 @@ namespace ConsoleGameEngine
 		HANDLE readHandle;
 		COORD screenSize;
 		SMALL_RECT screenRect;
-		Canvas screenCanvas;
+		Canvas* activeCanvas;
+		Canvas* presentedCanvas;
 		bool gameActive;
 		void UpdateInput();
 	
@@ -28,8 +29,9 @@ namespace ConsoleGameEngine
 		~ConsoleGame();
 		
 		void Update();
-		void ClearScreen();
 		void Render();
+		void Quit();
+		
 		Canvas& GetCanvas();
 		bool IsGameActive();
 	};

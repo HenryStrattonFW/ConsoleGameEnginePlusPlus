@@ -4,18 +4,22 @@
 
 #include "../include/Canvas.h"
 #include "../include/Colours.h"
+#include <cassert>
+
+using namespace std;
 
 namespace ConsoleGameEngine
 {
 	Canvas::Canvas(short width, short height)
 	{
 		size = {width, height};
-		
 		buffer = new CHAR_INFO[width*height];
+		Clear();
 	}
+	
 	Canvas::~Canvas()
 	{
-		delete buffer;
+		delete[] buffer;
 	}
 	
 	CHAR_INFO* Canvas::GetBuffer()
@@ -30,17 +34,21 @@ namespace ConsoleGameEngine
 	
 	void Canvas::Clear()
 	{
+		Clear(BackgroundColour::Black);
+	}
+	
+	void Canvas::Clear(BackgroundColour colour)
+	{
 		for (int y = 0; y < size.Y; ++y)
 		{
 			for (int x = 0; x < size.X; ++x)
 			{
 				int idx = x + (size.X * y);
-				buffer[idx].Char.AsciiChar = ' ';
-				buffer[idx].Attributes = 0;
+				buffer[idx].Char.AsciiChar = static_cast<char>(PixelType::None);
+				buffer[idx].Attributes = static_cast<unsigned short>(colour);
 			}
 		}
 	}
-	
 	
 	void Canvas::SetPixel(short x, short y, char symbol, ForegroundColour colour, BackgroundColour bg)
 	{

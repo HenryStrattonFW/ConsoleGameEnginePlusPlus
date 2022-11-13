@@ -10,50 +10,40 @@ namespace ConsoleGameEngine
 {
 	namespace Input
 	{
-		struct InputFrame
-		{
-			std::map<unsigned short, bool> keyStates={};
-			DWORD mouseButtons = 0;
-			COORD mousePosition = {0,0};
-		};
-		
-		InputFrame currentFrame;
-		InputFrame previousFrame;
-		
-		
-		void SwapFrames(struct InputFrame *a, struct InputFrame *b)
-		{
-			struct InputFrame temp = *a;
-			*a = *b;
-			*b = temp;
-		}
+		std::map<unsigned short, bool> keyStates={};
+		std::map<unsigned short, bool> changed={};
+		DWORD prevMouseButtons = 0;
+		DWORD mouseButtons = 0;
+		COORD mousePosition = {0,0};
 		
 		void Update(HANDLE readHandle)
 		{
-			SwapFrames(&currentFrame, &previousFrame);
-			currentFrame.keyStates.clear();
+			prevMouseButtons = mouseButtons;
+			changed.clear();
+			
 			
 			DWORD eventCount;
 			GetNumberOfConsoleInputEvents(readHandle, &eventCount);
-			
 			if(eventCount == 0)
 				return;
 			
+			// Read in all the events.
 			DWORD numEventsRead = 0;
-			INPUT_RECORD *eventBuffer;
-			eventBuffer = new INPUT_RECORD[eventCount];
+			INPUT_RECORD *eventBuffer = new INPUT_RECORD[eventCount];
 			ReadConsoleInput(readHandle, eventBuffer, eventCount, &numEventsRead);
 			
+			// Process the events, extract only what we care about.
 			for(DWORD i=0;i<numEventsRead;i++)
 			{
 				switch (eventBuffer[i].EventType)
 				{
 					case KEY_EVENT:
-						currentFrame.keyStates.insert({eventBuffer[i].Event.KeyEvent.wVirtualKeyCode, true});
+						keyStates.insert_or_assign(eventBuffer[i].Event.KeyEvent.wVirtualKeyCode, eventBuffer[i].Event.KeyEvent.bKeyDown);
+						changed.insert({eventBuffer[i].Event.KeyEvent.wVirtualKeyCode, true});
 						break;
 					case MOUSE_EVENT:
-						currentFrame.mouseButtons = eventBuffer[i].Event.MouseEvent.dwButtonState;
-						currentFrame.mousePosition = eventBuffer[i].Event.MouseEvent.dwMousePosition;
+						mouseButtons = eventBuffer[i].Event.MouseEvent.dwButtonState;
+						mousePosition = eventBuffer[i].Event.MouseEvent.dwMousePosition;
 						break;
 					default:
 						// Some event types are not handled because we just don't care.
@@ -61,48 +51,47 @@ namespace ConsoleGameEngine
 						break;
 				}
 			}
-			delete eventBuffer;
-		}
-		
-		
-		bool CheckForKey(InputFrame &frame, unsigned short key)
-		{
-			if (frame.keyStates.count(key) == 0) return false;
-			return frame.keyStates[key];
+			delete[] eventBuffer;
 		}
 		
 		bool IsKeyDown(unsigned short key)
 		{
-			return CheckForKey(currentFrame, key);
+			if (keyStates.count(key) == 0) return false;
+			return keyStates[key];
 		}
 		
 		bool WasKeyPressed(unsigned short key)
 		{
-			return CheckForKey(currentFrame, key) &&
-				   !CheckForKey(previousFrame, key);
+			if (changed.count(key) == 0) return false;
+			return IsKeyDown(key);
 		}
 		
 		bool WasKeyReleased(unsigned short key)
 		{
-			return !CheckForKey(currentFrame, key) &&
-				   CheckForKey(previousFrame, key);
+			if (changed.count(key) == 0) return false;
+			return !IsKeyDown(key);
 		}
 		
 		bool MouseButtonDown(MouseButton button)
 		{
-			return (currentFrame.mouseButtons & static_cast<DWORD>(button)) != 0;
+			return (mouseButtons & static_cast<DWORD>(button)) != 0;
 		}
 		
 		bool MouseButtonPressed(MouseButton button)
 		{
-			return ((currentFrame.mouseButtons & static_cast<DWORD>(button)) != 0 &&
-				   (previousFrame.mouseButtons & static_cast<DWORD>(button)) == 0);
+			return (mouseButtons & static_cast<DWORD>(button) != 0) &&
+					(prevMouseButtons & static_cast<DWORD>(button) == 0);
 		}
 		
 		bool MouseButtonReleased(MouseButton button)
 		{
-			return ((previousFrame.mouseButtons & static_cast<DWORD>(button)) != 0 &&
-					(currentFrame.mouseButtons & static_cast<DWORD>(button)) == 0);
+			return (mouseButtons & static_cast<DWORD>(button) == 0) &&
+				   (prevMouseButtons & static_cast<DWORD>(button) != 0);
+		}
+		
+		COORD MousePosition()
+		{
+			return mousePosition;
 		}
 		
 	} // Input
