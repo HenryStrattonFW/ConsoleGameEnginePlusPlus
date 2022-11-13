@@ -8,4 +8,5 @@ In an attempt to brush off the cobwebs, and try to get a bit of practice into C+
 
 ### Test Cart
 In order to test some bits as they develop, the project contains a Test Cartridge whgich currently looks like this.
-![Test Cart work in progress](images/TestCart.png)
+
+![Test Cart work in progress](images/TestCart.gif)
