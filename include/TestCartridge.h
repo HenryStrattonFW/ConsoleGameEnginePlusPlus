@@ -12,10 +12,14 @@ namespace ConsoleGameEngine
 	class TestCartridge : public GameCartridge
 	{
 	public:
-		void Inititialize();
-		void Deinitialize();
-		void Update(double deltaTime);
+		void OnInitialize();
+		void OnDeinitialize();
+		void Update(double deltaTimeMs);
 		void Render(Canvas& canvas);
+		
+	private:
+		void RefreshNested();
+		Canvas* nestedCanvas;
 	};
 	
 } // ConsoleGameEngine

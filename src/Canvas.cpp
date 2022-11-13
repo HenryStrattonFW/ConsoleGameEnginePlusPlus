@@ -22,6 +22,7 @@ namespace ConsoleGameEngine
 		delete[] buffer;
 	}
 	
+	
 	CHAR_INFO* Canvas::GetBuffer()
 	{
 		return buffer;
@@ -31,6 +32,7 @@ namespace ConsoleGameEngine
 	{
 		return size;
 	}
+	
 	
 	void Canvas::Clear()
 	{
@@ -49,6 +51,7 @@ namespace ConsoleGameEngine
 			}
 		}
 	}
+	
 	
 	void Canvas::SetPixel(short x, short y, char symbol, ForegroundColour colour, BackgroundColour bg)
 	{
@@ -69,6 +72,33 @@ namespace ConsoleGameEngine
 		buffer[idx].Char.AsciiChar = symbol;
 		buffer[idx].Attributes = static_cast<unsigned short>(colour);
 	}
+	
+	
+	void Canvas::DrawText(short x, short y, string text, ForegroundColour colour)
+	{
+		for(int i=0;i<text.length();i++)
+			SetPixel(x+i, y, text[i], colour);
+	}
+	
+	void Canvas::DrawCanvas(Canvas& otherCanvas, short x, short y)
+	{
+		for(short y2=0; y2 < otherCanvas.size.Y; y2++)
+		{
+			for(short x2=0; x2 < otherCanvas.size.X; x2++)
+			{
+				short tx = x+x2;
+				short ty = y+y2;
+				if (tx < 0 || ty < 0 || tx >= size.X || ty >= size.Y)
+					continue;
+				
+				int idxOther = x2 + (otherCanvas.size.X * y2);
+				int idx = tx + (size.X * ty);
+				buffer[idx].Char.AsciiChar = otherCanvas.buffer[idxOther].Char.AsciiChar;
+				buffer[idx].Attributes = otherCanvas.buffer[idxOther].Attributes;
+			}
+		}
+	}
+	
 	
 	void Canvas::DrawRect(short x, short y, short w, short h, ForegroundColour colour)
 	{
@@ -97,8 +127,7 @@ namespace ConsoleGameEngine
 				SetPixel(x + ix, y + iy, static_cast<char>(PixelType::Full), colour);
 	}
 	
-	void
-	Canvas::FillRect(short x, short y, short w, short h, ForegroundColour strokeColour, ForegroundColour fillColour)
+	void Canvas::FillRect(short x, short y, short w, short h, ForegroundColour strokeColour, ForegroundColour fillColour)
 	{
 		DrawRect(x, y, w, h, strokeColour);
 		FillRect(x + 1, y + 1, w - 2, h - 2, fillColour);
@@ -168,6 +197,7 @@ namespace ConsoleGameEngine
 		FillCircle(x, y, radius, fillColour);
 		DrawCircle(x, y, radius, strokeColour);
 	}
+	
 	
 	void Canvas::DrawLine(short x1, short y1, short x2, short y2, ForegroundColour colour)
 	{

@@ -4,6 +4,7 @@
 
 #include "../include/GameConsole.h"
 #include "../include/Input.h"
+#include <chrono>
 
 namespace ConsoleGameEngine
 {
@@ -63,14 +64,20 @@ namespace ConsoleGameEngine
 		// TODO: Likely need some cleanup eventually here.
 	}
 	
+	
 	void GameConsole::Run(GameCartridge &cartridge)
 	{
+		std::chrono::time_point<std::chrono::high_resolution_clock> lastFrameTime,currentFrameTime;
+		
 		cartridge.Inititialize();
 		while(cartridge.IsRunning())
 		{
-			Update();
+			lastFrameTime = currentFrameTime;
+			currentFrameTime = std::chrono::high_resolution_clock::now();
 			
-			cartridge.Update(0);
+			Update();
+			double deltaMs = std::chrono::duration_cast<std::chrono::milliseconds>(currentFrameTime-lastFrameTime).count();
+			cartridge.Update(deltaMs);
 			cartridge.Render(*activeCanvas);
 			
 			Render();

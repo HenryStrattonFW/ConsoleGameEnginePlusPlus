@@ -8,6 +8,12 @@ namespace ConsoleGameEngine
 	void GameCartridge::Inititialize()
 	{
 		isRunning = true;
+		OnInitialize();
+	}
+	
+	void GameCartridge::Deinitialize()
+	{
+		OnDeinitialize();
 	}
 	
 	void GameCartridge::Quit()

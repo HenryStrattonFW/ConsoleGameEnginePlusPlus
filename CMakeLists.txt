@@ -3,4 +3,4 @@ project(ConsoleGameEnginePlusPlus)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(ConsoleGameEnginePlusPlus main.cpp src/GameConsole.cpp include/GameConsole.h src/Canvas.cpp include/Canvas.h include/Colours.h src/Input.cpp include/Input.h include/GameCartridge.h src/TestCartridge.cpp include/TestCartridge.h src/GameCartridge.cpp)
+add_executable(ConsoleGameEnginePlusPlus main.cpp src/GameConsole.cpp include/GameConsole.h src/Canvas.cpp include/Canvas.h include/Colours.h src/Input.cpp include/Input.h include/GameCartridge.h src/TestCartridge.cpp include/TestCartridge.h src/GameCartridge.cpp src/Utils.cpp include/Utils.h)

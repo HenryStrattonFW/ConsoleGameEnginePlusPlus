@@ -7,7 +7,7 @@
 
 #include <Windows.h>
 #include "Colours.h"
-#include <vector>
+#include <string>
 
 namespace ConsoleGameEngine
 {
@@ -25,6 +25,9 @@ namespace ConsoleGameEngine
 		
 		void SetPixel(short x, short y, char symbol, ForegroundColour colour, BackgroundColour bg);
 		void SetPixel(short x, short y, char symbol, ForegroundColour colour);
+		
+		void DrawText(short x, short y, std::string text, ForegroundColour colour);
+		void DrawCanvas(Canvas& otherCanvas, short x, short y);
 		
 		void DrawRect(short x, short y, short w, short h, ForegroundColour colour);
 		void FillRect(short x, short y, short w, short h, ForegroundColour colour);

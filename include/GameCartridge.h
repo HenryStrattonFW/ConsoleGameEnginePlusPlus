@@ -13,12 +13,14 @@ namespace ConsoleGameEngine
 	{
 	public:
 		void Inititialize();
-		virtual void Deinitialize() = 0;
-		virtual void Update(double deltaTime) = 0;
+		void Deinitialize();
+		virtual void Update(double deltaTimeMs) = 0;
 		virtual void Render(Canvas& canvas) = 0;
 		bool IsRunning();
 		
 	protected:
+		virtual void OnInitialize() = 0;
+		virtual void OnDeinitialize() = 0;
 		void Quit();
 		
 	private:
