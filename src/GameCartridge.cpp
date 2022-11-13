@@ -10,18 +10,6 @@ namespace ConsoleGameEngine
 		isRunning = true;
 	}
 	
-	void GameCartridge::Deinitialize()
-	{
-	}
-	
-	void GameCartridge::Update(double deltaTime)
-	{
-	}
-	
-	void GameCartridge::Render(Canvas& canvas)
-	{
-	}
-	
 	void GameCartridge::Quit()
 	{
 		isRunning = false;

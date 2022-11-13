@@ -5,7 +5,7 @@ using namespace ConsoleGameEngine;
 
 int main()
 {
-	GameCartridge* cart = new TestCartridge();
+	TestCartridge* cart = new TestCartridge();
 	GameConsole game("Test", 80, 72);
 	game.Run(*cart);
 	return 0;

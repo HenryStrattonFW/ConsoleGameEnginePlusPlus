@@ -22,7 +22,7 @@ namespace ConsoleGameEngine
 	
 	void TestCartridge::Render(Canvas& canvas)
 	{
-	
+		canvas.DrawRect(5,5,16,16,ForegroundColour::Red);
 	}
 	
 } // ConsoleGameEngine

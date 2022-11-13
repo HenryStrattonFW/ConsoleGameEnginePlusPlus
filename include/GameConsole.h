@@ -9,6 +9,7 @@
 #include <string>
 #include "Canvas.h"
 #include "GameCartridge.h"
+
 using namespace std;
 
 namespace ConsoleGameEngine
@@ -18,18 +19,19 @@ namespace ConsoleGameEngine
 	public:
 		GameConsole(string name, short width, short height);
 		~GameConsole();
+		
 		void Run(GameCartridge &cartridge);
 		
 	private:
+		void Update();
+		void Render();
+		
 		HANDLE writeHandle;
 		HANDLE readHandle;
 		COORD screenSize;
 		SMALL_RECT screenRect;
 		Canvas* activeCanvas;
 		Canvas* presentedCanvas;
-		bool gameActive;
-		void Update();
-		void Render();
 	};
 } // ConsoleGameEngine
 

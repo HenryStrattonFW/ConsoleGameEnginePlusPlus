@@ -6,7 +6,6 @@
 #define CONSOLEGAMEENGINEPLUSPLUS_GAMECARTRIDGE_H
 
 #include "Canvas.h"
-#include "GameConsole.h"
 
 namespace ConsoleGameEngine
 {
@@ -14,9 +13,9 @@ namespace ConsoleGameEngine
 	{
 	public:
 		void Inititialize();
-		void Deinitialize();
-		void Update(double deltaTime);
-		void Render(Canvas& canvas);
+		virtual void Deinitialize() = 0;
+		virtual void Update(double deltaTime) = 0;
+		virtual void Render(Canvas& canvas) = 0;
 		bool IsRunning();
 		
 	protected:

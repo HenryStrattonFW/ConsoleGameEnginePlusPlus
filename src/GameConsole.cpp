@@ -17,7 +17,6 @@ namespace ConsoleGameEngine
 		screenSize = {width, height};
 		activeCanvas = new Canvas(width, height);
 		presentedCanvas = new Canvas(width, height);
-		gameActive = true;
 		
 		// Set up the handles for reading/writing:
 		writeHandle = GetStdHandle(STD_OUTPUT_HANDLE);
