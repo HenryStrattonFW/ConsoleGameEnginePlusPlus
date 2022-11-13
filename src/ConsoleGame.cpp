@@ -3,6 +3,7 @@
 //
 
 #include "../include/ConsoleGame.h"
+#include "../include/Input.h"
 
 namespace ConsoleGameEngine
 {
@@ -38,6 +39,14 @@ namespace ConsoleGameEngine
 		SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
 		
 		// Set up the window.
+		DWORD mode = 0;
+		if(GetConsoleMode(readHandle, &mode))
+		{
+			mode |= ENABLE_MOUSE_INPUT;
+			mode &= ~ENABLE_QUICK_EDIT_MODE;
+			mode |= ENABLE_EXTENDED_FLAGS;
+			SetConsoleMode(readHandle, mode);
+		}
 		SetConsoleTitle(name.c_str());
 		SetConsoleWindowInfo(writeHandle, TRUE, &screenRect);
 		SetConsoleScreenBufferSize(writeHandle, screenSize);
@@ -66,6 +75,7 @@ namespace ConsoleGameEngine
 	
 	void ConsoleGame::Update()
 	{
+		Input::Update(readHandle);
 	}
 	
 	void ConsoleGame::ClearScreen()

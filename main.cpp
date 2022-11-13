@@ -1,4 +1,5 @@
 #include "./include/ConsoleGame.h"
+#include "./include/Input.h"
 using namespace ConsoleGameEngine;
 
 int main()
@@ -10,12 +11,16 @@ int main()
 		game.ClearScreen();
 		game.Update();
 		
-		Canvas &canvas = game.GetCanvas();
-		for (short y = 0; y < canvas.GetSize().Y; y++)
+		if(Input::MouseButtonDown(MouseButton::Left))
+		//if(Input::IsKeyDown(VK_SPACE))
 		{
-			for (short x = 0; x < canvas.GetSize().X; x++)
+			Canvas &canvas = game.GetCanvas();
+			for (short y = 0; y < canvas.GetSize().Y; y++)
 			{
-				canvas.SetPixel(x,y,rand()%256, ForegroundColour::Green);
+				for (short x = 0; x < canvas.GetSize().X; x++)
+				{
+					canvas.SetPixel(x,y,rand()%256, ForegroundColour::Green);
+				}
 			}
 		}
 		
