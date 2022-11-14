@@ -1,5 +1,5 @@
-#include "./include/GameConsole.h"
-#include "./include/TestCartridge.h"
+#include "include/core/GameConsole.h"
+#include "include/debug/TestCartridge.h"
 
 using namespace ConsoleGameEngine;
 

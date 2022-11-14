@@ -1,0 +1,4 @@
+Log : Initialized log file.
+Log : Creating GameConsole...
+Log : GameConsole is ready!
+Log : Booting Cartridge: Test Cartridge
