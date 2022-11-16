@@ -35,11 +35,18 @@ namespace ConsoleGameEngine
 			// Process the events, extract only what we care about.
 			for(DWORD i=0;i<numEventsRead;i++)
 			{
+				unsigned short code=0;
 				switch (eventBuffer[i].EventType)
 				{
 					case KEY_EVENT:
-						keyStates.insert_or_assign(eventBuffer[i].Event.KeyEvent.wVirtualKeyCode, eventBuffer[i].Event.KeyEvent.bKeyDown);
-						changed.insert({eventBuffer[i].Event.KeyEvent.wVirtualKeyCode, true});
+						code = eventBuffer[i].Event.KeyEvent.wVirtualKeyCode;
+						if (code == MAPVK_VK_TO_CHAR)
+						{
+							code = eventBuffer[i].Event.KeyEvent.uChar.AsciiChar;
+						}
+						keyStates.insert_or_assign(code, eventBuffer[i].Event.KeyEvent.bKeyDown);
+						changed.insert({code, true});
+						//TODO: Work our an approach that handles character keys, virtual key codes don't map them all.
 						break;
 					case MOUSE_EVENT:
 						mouseButtons = eventBuffer[i].Event.MouseEvent.dwButtonState;

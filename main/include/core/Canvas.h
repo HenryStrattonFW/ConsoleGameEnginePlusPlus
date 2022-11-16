@@ -42,6 +42,7 @@ namespace ConsoleGameEngine
 	private:
 		COORD size;
 		CHAR_INFO* buffer;
+		SMALL_RECT canvasRect;
 	};
 	
 } // ConsoleGameEngine

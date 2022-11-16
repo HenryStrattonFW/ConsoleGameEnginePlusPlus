@@ -3,8 +3,10 @@
 //
 
 #include "../../include/core/Canvas.h"
-#include "../../include/core/Colours.h"
-#include <cassert>
+#include "../../include/core/Utils.h"
+
+#define CHAR(x) static_cast<char>(x)
+#define USHORT(x) static_cast<unsigned short>(x)
 
 using namespace std;
 
@@ -14,6 +16,7 @@ namespace ConsoleGameEngine
 	{
 		size = {width, height};
 		buffer = new CHAR_INFO[width*height];
+		canvasRect = {0,0,width,height};
 		Clear();
 	}
 	
@@ -46,8 +49,8 @@ namespace ConsoleGameEngine
 			for (int x = 0; x < size.X; ++x)
 			{
 				int idx = x + (size.X * y);
-				buffer[idx].Char.AsciiChar = static_cast<char>(PixelType::None);
-				buffer[idx].Attributes = static_cast<unsigned short>(colour);
+				buffer[idx].Char.AsciiChar = CHAR(PixelType::None);
+				buffer[idx].Attributes = USHORT(colour);
 			}
 		}
 	}
@@ -60,7 +63,7 @@ namespace ConsoleGameEngine
 		
 		int idx = x + (size.X * y);
 		buffer[idx].Char.AsciiChar = symbol;
-		buffer[idx].Attributes = static_cast<unsigned short>(colour) | static_cast<unsigned short>(bg);
+		buffer[idx].Attributes = USHORT(colour) | USHORT(bg);
 	}
 	
 	void Canvas::SetPixel(short x, short y, char symbol, ForegroundColour colour)
@@ -70,7 +73,7 @@ namespace ConsoleGameEngine
 		
 		int idx = x + (size.X * y);
 		buffer[idx].Char.AsciiChar = symbol;
-		buffer[idx].Attributes = static_cast<unsigned short>(colour);
+		buffer[idx].Attributes = USHORT(colour);
 	}
 	
 	
@@ -82,19 +85,28 @@ namespace ConsoleGameEngine
 	
 	void Canvas::DrawCanvas(Canvas& otherCanvas, short x, short y)
 	{
-		for(short y2=0; y2 < otherCanvas.size.Y; y2++)
+		SMALL_RECT overlap = Utils::GetOverlap(
+				canvasRect,
+				Utils::RectFromPosAndSize({x,y}, otherCanvas.size)
+		);
+		
+		// No overlap.
+		if(overlap.Right == 0 || overlap.Bottom == 0) return;
+		
+		short sourceLeft = x > 0 ? 0 : -x;
+		short sourceTop = y > 0 ? 0 : -y;
+		short width = (overlap.Right - overlap.Left);
+		short height = (overlap.Bottom - overlap.Top);
+		
+		// Calculate the area of the incoming canvas that we can actually draw.
+		for(short iy=0; iy < height; iy++)
 		{
-			for(short x2=0; x2 < otherCanvas.size.X; x2++)
+			for(short ix=0; ix < width; ix++)
 			{
-				short tx = x+x2;
-				short ty = y+y2;
-				if (tx < 0 || ty < 0 || tx >= size.X || ty >= size.Y)
-					continue;
-				
-				int idxOther = x2 + (otherCanvas.size.X * y2);
-				int idx = tx + (size.X * ty);
-				buffer[idx].Char.AsciiChar = otherCanvas.buffer[idxOther].Char.AsciiChar;
-				buffer[idx].Attributes = otherCanvas.buffer[idxOther].Attributes;
+				int destIndex = (overlap.Left + ix) + (size.X * (overlap.Top + iy));
+				int sourceIndex = (sourceLeft+ix) + (otherCanvas.size.X * (sourceTop+iy));
+				buffer[destIndex].Char.AsciiChar = otherCanvas.buffer[sourceIndex].Char.AsciiChar;
+				buffer[destIndex].Attributes = otherCanvas.buffer[sourceIndex].Attributes;
 			}
 		}
 	}
@@ -107,13 +119,15 @@ namespace ConsoleGameEngine
 		
 		for (short ix = 0; ix < w; ix++)
 		{
-			SetPixel(x + ix, y, static_cast<char>(PixelType::Full), colour);
-			SetPixel(x + ix, y + (h - 1), static_cast<char>(PixelType::Full), colour);
+			if(x+ix < 0) continue;
+			SetPixel(x + ix, y, CHAR(PixelType::Full), colour);
+			SetPixel(x + ix, y + (h - 1), CHAR(PixelType::Full), colour);
 		}
 		for (short iy = 0; iy < h; iy++)
 		{
-			SetPixel(x, y + iy, static_cast<char>(PixelType::Full), colour);
-			SetPixel(x + (w - 1), y + iy, static_cast<char>(PixelType::Full), colour);
+			if(y+iy < 0) continue;
+			SetPixel(x, y + iy, CHAR(PixelType::Full), colour);
+			SetPixel(x + (w - 1), y + iy, CHAR(PixelType::Full), colour);
 		}
 	}
 	
@@ -123,8 +137,14 @@ namespace ConsoleGameEngine
 			return;
 		
 		for (short ix = 0; ix < w; ix++)
+		{
+			if(x+ix < 0) continue;
 			for (short iy = 0; iy < h; iy++)
-				SetPixel(x + ix, y + iy, static_cast<char>(PixelType::Full), colour);
+			{
+				if(y+iy < 0) continue;
+				SetPixel(x + ix, y + iy, CHAR(PixelType::Full), colour);
+			}
+		}
 	}
 	
 	void Canvas::FillRect(short x, short y, short w, short h, ForegroundColour strokeColour, ForegroundColour fillColour)
@@ -143,14 +163,14 @@ namespace ConsoleGameEngine
 		float temp = 0;
 		do
 		{
-			SetPixel(x + temp, y + radius, static_cast<char>(PixelType::Full), colour);
-			SetPixel(x + temp, y - radius, static_cast<char>(PixelType::Full), colour);
-			SetPixel(x - temp, y + radius, static_cast<char>(PixelType::Full), colour);
-			SetPixel(x - temp, y - radius, static_cast<char>(PixelType::Full), colour);
-			SetPixel(x + radius, y + temp, static_cast<char>(PixelType::Full), colour);
-			SetPixel(x + radius, y - temp, static_cast<char>(PixelType::Full), colour);
-			SetPixel(x - radius, y + temp, static_cast<char>(PixelType::Full), colour);
-			SetPixel(x - radius, y - temp, static_cast<char>(PixelType::Full), colour);
+			SetPixel(x + temp, y + radius, CHAR(PixelType::Full), colour);
+			SetPixel(x + temp, y - radius, CHAR(PixelType::Full), colour);
+			SetPixel(x - temp, y + radius, CHAR(PixelType::Full), colour);
+			SetPixel(x - temp, y - radius, CHAR(PixelType::Full), colour);
+			SetPixel(x + radius, y + temp, CHAR(PixelType::Full), colour);
+			SetPixel(x + radius, y - temp, CHAR(PixelType::Full), colour);
+			SetPixel(x - radius, y + temp, CHAR(PixelType::Full), colour);
+			SetPixel(x - radius, y - temp, CHAR(PixelType::Full), colour);
 			
 			if (d < 0)
 			{
@@ -201,13 +221,16 @@ namespace ConsoleGameEngine
 	
 	void Canvas::DrawLine(short x1, short y1, short x2, short y2, ForegroundColour colour)
 	{
+		if((x1 < 0 && x2<0) || (x1>size.X && x2>size.X)) return;
+		if((y1 < 0 && y2<0) || (y1>size.Y && y2>size.Y)) return;
+		
 		int dx = (int) abs(x2 - x1), sx = x1 < x2 ? 1 : -1;
 		int dy = (int) abs(y2 - y1), sy = y1 < y2 ? 1 : -1;
 		int err = (dx > dy ? dx : -dy) / 2, e2;
 		
 		while (x1 != x2 || y1 != y2)
 		{
-			SetPixel(x1, y1, static_cast<char>(PixelType::Full), colour);
+			SetPixel(x1, y1, CHAR(PixelType::Full), colour);
 			e2 = err;
 			if (e2 > -dx)
 			{

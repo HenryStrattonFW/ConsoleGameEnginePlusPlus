@@ -17,7 +17,7 @@ namespace ConsoleGameEngine
 					  static_cast<SHORT>(width-1),
 					  static_cast<SHORT>(height-1)
 		};
-		screenSize = {width, height};
+		screenSize = {width,height};
 		activeCanvas = new Canvas(width, height);
 		presentedCanvas = new Canvas(width, height);
 		
@@ -30,16 +30,6 @@ namespace ConsoleGameEngine
 		GetConsoleCursorInfo(writeHandle, &cursorInfo);
 		cursorInfo.bVisible = false;
 		SetConsoleCursorInfo(writeHandle, &cursorInfo);
-		
-		// Set us up on a square sized font for more sensible visuals.
-		CONSOLE_FONT_INFOEX cfi;
-		cfi.cbSize = sizeof(cfi);
-		cfi.nFont = 0;
-		cfi.dwFontSize = {8,8};
-		cfi.FontFamily = FF_DONTCARE;
-		cfi.FontWeight = FW_NORMAL;
-		std::wcscpy(cfi.FaceName, L"Terminal");
-		SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
 		
 		// Set up the window.
 		DWORD mode = 0;
@@ -59,6 +49,22 @@ namespace ConsoleGameEngine
 		DeleteMenu(sysMenu, SC_SIZE, MF_BYCOMMAND);
 		DeleteMenu(sysMenu, SC_MINIMIZE, MF_BYCOMMAND);
 		DeleteMenu(sysMenu, SC_MAXIMIZE, MF_BYCOMMAND);
+		
+		
+		/*
+		Note: Setting up font as last step as it seems to be the only way to avoid the console
+		Getting extra space on each side, I would have thought setting size would take font into
+		account but clearly something else is happening behind the scenes.
+		*/
+		CONSOLE_FONT_INFOEX cfi;
+		cfi.cbSize = sizeof(cfi);
+		cfi.nFont = 0;
+		cfi.dwFontSize = {8,8};
+		cfi.FontFamily = FF_DONTCARE;
+		cfi.FontWeight = FW_NORMAL;
+		std::wcscpy(cfi.FaceName, L"Terminal");
+		SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), FALSE, &cfi);
+		
 		
 		Debug::Log("GameConsole is ready!");
 	}

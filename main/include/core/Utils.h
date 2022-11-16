@@ -16,6 +16,8 @@ namespace ConsoleGameEngine
 		ForegroundColour RandomForeground();
 		BackgroundColour RandomBackground();
 		void DrawTextCentered(Canvas& canvas, short y, std::string text, ForegroundColour colour);
+		SMALL_RECT GetOverlap(SMALL_RECT a, SMALL_RECT b);
+		SMALL_RECT RectFromPosAndSize(COORD pos, COORD size);
 	} //Utils
 	
 } // ConsoleGameEngine

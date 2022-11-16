@@ -61,5 +61,31 @@ namespace ConsoleGameEngine
 			canvas.DrawText((canvas.GetSize().X/2) - (text.length()/2),y,text, colour);
 		}
 		
+		SMALL_RECT GetOverlap(SMALL_RECT a, SMALL_RECT b)
+		{
+			short left = max(a.Left, b.Left);
+			short right = min(a.Right, b.Right);
+			short top = max(a.Top, b.Top);
+			short bottom = min(a.Bottom, b.Bottom);
+			if (right >= left && bottom >= top)
+			{
+				return {left,top,right,bottom };
+			}
+			else
+			{
+				return {};
+			}
+		}
+		
+		SMALL_RECT RectFromPosAndSize(COORD pos, COORD size)
+		{
+			return {
+				pos.X,
+				pos.Y,
+				static_cast<SHORT>(pos.X+size.X),
+				static_cast<SHORT>(pos.Y+size.Y)
+			};
+		}
+		
 	}//Utils
 } // ConsoleGameEngine
