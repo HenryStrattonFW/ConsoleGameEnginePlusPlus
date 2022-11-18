@@ -55,7 +55,6 @@ namespace ConsoleGameEngine
 		}
 	}
 	
-	
 	void Canvas::SetPixel(short x, short y, char symbol, ForegroundColour colour, BackgroundColour bg)
 	{
 		if (x < 0 || y < 0 || x >= size.X || y >= size.Y)
@@ -227,6 +226,9 @@ namespace ConsoleGameEngine
 		int dx = (int) abs(x2 - x1), sx = x1 < x2 ? 1 : -1;
 		int dy = (int) abs(y2 - y1), sy = y1 < y2 ? 1 : -1;
 		int err = (dx > dy ? dx : -dy) / 2, e2;
+		
+		SetPixel(x1, y1, CHAR(PixelType::Full), colour);
+		SetPixel(x2, y2, CHAR(PixelType::Full), colour);
 		
 		while (x1 != x2 || y1 != y2)
 		{
